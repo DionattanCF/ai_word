@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OfficeApp
+    xmlns="http://schemas.microsoft.com/office/appforoffice/1.1"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:bt="http://schemas.microsoft.com/office/officeappbasictypes/1.0"
+    xsi:type="TaskPaneApp">
+    <Id>12345678-1234-1234-1234-123456789012</Id>
+    <Version>1.0.0.0</Version>
+    <ProviderName>Legal AI Assistant</ProviderName>
+    <DefaultLocale>pt-BR</DefaultLocale>
+    <DisplayName DefaultValue="Assistente Jurídico IA" />
+    <Description DefaultValue="Assistente de IA para auxiliar na redação de documentos jurídicos"/>
+    <IconUrl DefaultValue="https://raw.githubusercontent.com/SEU_USUARIO/SEU_REPOSITORIO/gh-pages/assets/icon-32.png"/>
+    <HighResolutionIconUrl DefaultValue="https://raw.githubusercontent.com/SEU_USUARIO/SEU_REPOSITORIO/gh-pages/assets/hi-res-icon.png"/>
+    <SupportUrl DefaultValue="https://github.com/SEU_USUARIO/SEU_REPOSITORIO/issues"/>
+    <Hosts>
+        <Host Name="Document"/>
+    </Hosts>
+    <DefaultSettings>
+        <SourceLocation DefaultValue="https://SEU_USUARIO.github.io/SEU_REPOSITORIO/index.html"/>
+    </DefaultSettings>
+    <Permissions>ReadWriteDocument</Permissions>
+</OfficeApp> 
