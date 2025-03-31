@@ -6,7 +6,7 @@
 'use strict';
 
 const defaultConfig = {
-    apiKey: '', // Adicione sua chave API aqui
+    apiKey: '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',
     instructions: 'Você é um assistente jurídico especializado em direito eleitoral brasileiro. Seu objetivo é ajudar na análise e redação de documentos jurídicos, fornecendo sugestões precisas e fundamentadas na legislação eleitoral vigente.'
 };
 
