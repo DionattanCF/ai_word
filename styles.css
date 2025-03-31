@@ -5,12 +5,19 @@ body {
 }
 
 .header {
-    font-size: 20px;
-    margin-bottom: 20px;
+    background-color: #2c3e50;
+    color: white;
+    padding: 20px;
+    text-align: center;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 24px;
 }
 
 .main-content {
-    margin-bottom: 20px;
+    padding: 20px;
 }
 
 .footer {
@@ -18,63 +25,79 @@ body {
     text-align: center;
 }
 
-#response {
-    margin-top: 20px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    min-height: 100px;
-}
-
-button {
-    padding: 8px 16px;
-    margin: 5px;
-    cursor: pointer;
-}
-
-textarea {
-    width: 100%;
-    min-height: 100px;
-    margin-bottom: 10px;
-    padding: 8px;
-}
-
-.settings-section {
+.button-group {
+    display: flex;
+    gap: 10px;
     margin-bottom: 20px;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
+    flex-wrap: wrap;
 }
 
-.settings-section h3 {
-    margin-top: 0;
-    font-size: 16px;
-}
-
-.settings-section label {
-    display: block;
-    margin-bottom: 5px;
-}
-
-.settings-section input,
-.settings-section textarea {
-    width: 100%;
-    margin-bottom: 10px;
-}
-
-.settings-section button {
-    background-color: #4CAF50;
+.button-group button {
+    background-color: #3498db;
     color: white;
     border: none;
-    border-radius: 4px;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
 }
 
-.settings-section button:hover {
-    background-color: #45a049;
+.button-group button:hover {
+    background-color: #2980b9;
+}
+
+.chat-section {
+    margin-bottom: 20px;
+}
+
+.chat-section textarea {
+    width: 100%;
+    height: 100px;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    resize: vertical;
+}
+
+.chat-section button {
+    background-color: #2ecc71;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.chat-section button:hover {
+    background-color: #27ae60;
+}
+
+#response {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+}
+
+#response h3 {
+    margin-top: 0;
+    color: #2c3e50;
+}
+
+#response-content {
+    white-space: pre-wrap;
+    line-height: 1.5;
 }
 
 .error {
-    color: red;
-    margin-top: 5px;
+    background-color: #ffebee;
+    color: #c62828;
+    padding: 15px;
+    border-radius: 5px;
+    border: 1px solid #ef9a9a;
+    margin: 10px 0;
 }
 
 .success {

@@ -14,11 +14,49 @@ const defaultConfig = {
 
 let Office = window.Office;
 
-Office.onReady(info => {
-    if (info.host === Office.HostType.Word) {
-        document.getElementById('response-content').innerHTML = 'Bem-vindo ao Assistente Jurídico IA!';
+// Garantir que o Office.js está carregado antes de inicializar
+if (window.Office) {
+    initializeApp();
+} else {
+    window.addEventListener('load', () => {
+        if (window.Office) {
+            initializeApp();
+        } else {
+            showError('Erro: Office.js não foi carregado corretamente.');
+        }
+    });
+}
+
+function initializeApp() {
+    try {
+        Office.onReady(info => {
+            if (info.host === Office.HostType.Word) {
+                const responseContent = document.getElementById('response-content');
+                if (responseContent) {
+                    responseContent.innerHTML = 'Bem-vindo ao Assistente Jurídico IA!';
+                }
+                
+                // Verificar se a chave API está configurada
+                if (!defaultConfig.apiKey) {
+                    showError('Por favor, configure sua chave API no arquivo app.js');
+                }
+            } else {
+                showError('Este add-in funciona apenas no Microsoft Word.');
+            }
+        });
+    } catch (error) {
+        showError('Erro ao inicializar o add-in: ' + error.message);
     }
-});
+}
+
+function showError(message) {
+    const responseContent = document.getElementById('response-content');
+    if (responseContent) {
+        responseContent.innerHTML = `<div class="error">${message}</div>`;
+    } else {
+        console.error(message);
+    }
+}
 
 async function getSelectedText() {
     return new Promise((resolve, reject) => {
@@ -274,8 +312,4 @@ async function saveApiKey() {
     const apiKey = document.getElementById('apiKey').value;
     localStorage.setItem('openaiApiKey', apiKey);
     alert('Chave API salva com sucesso!');
-}
-
-function showError(message) {
-    alert(message);
 } 
