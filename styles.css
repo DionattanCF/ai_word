@@ -103,4 +103,30 @@ body {
 .success {
     color: green;
     margin-top: 5px;
+}
+
+.config-section {
+    padding: 20px;
+    margin: 20px;
+    background-color: #f3f2f1;
+    border-radius: 4px;
+    display: none; /* Inicialmente oculta */
+}
+
+.config-section.visible {
+    display: block;
+}
+
+.config-section h2 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: #323130;
+}
+
+.config-section .ms-TextField {
+    margin-bottom: 15px;
+}
+
+.config-section .ms-Button {
+    margin-top: 10px;
 } 

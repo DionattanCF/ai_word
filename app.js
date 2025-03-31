@@ -25,9 +25,14 @@ function initializeApp() {
         defaultConfig.apiKey = savedApiKey;
     }
 
+    // Mostra ou esconde a seção de configuração
+    const configSection = document.getElementById('config-section');
     if (!defaultConfig.apiKey) {
-        showError('Por favor, configure sua chave API nas configurações');
+        configSection.classList.add('visible');
+        showError('Por favor, configure sua chave API para continuar');
         return;
+    } else {
+        configSection.classList.remove('visible');
     }
 
     // Adiciona listeners para todos os botões
