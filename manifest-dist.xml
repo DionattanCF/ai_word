@@ -1,23 +1,85 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<OfficeApp
-    xmlns="http://schemas.microsoft.com/office/appforoffice/1.1"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:bt="http://schemas.microsoft.com/office/officeappbasictypes/1.0"
-    xsi:type="TaskPaneApp">
-    <Id>12345678-1234-1234-1234-123456789012</Id>
-    <Version>1.1.0.0</Version>
-    <ProviderName>Legal AI Assistant</ProviderName>
-    <DefaultLocale>pt-BR</DefaultLocale>
-    <DisplayName DefaultValue="Assistente Jurídico IA - Coutrin e Figueiredo Advogados" />
-    <Description DefaultValue="Assistente de IA para auxiliar na redação de documentos jurídicos"/>
-    <IconUrl DefaultValue="https://raw.githubusercontent.com/dionattancf/ai_word/gh-pages/assets/icon-32.png"/>
-    <HighResolutionIconUrl DefaultValue="https://raw.githubusercontent.com/dionattancf/ai_word/gh-pages/assets/hi-res-icon.png"/>
-    <SupportUrl DefaultValue="https://github.com/dionattancf/ai_word/issues"/>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<OfficeApp xmlns="http://schemas.microsoft.com/office/appforoffice/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bt="http://schemas.microsoft.com/office/officeappbasictypes/1.0" xmlns:ov="http://schemas.microsoft.com/office/taskpaneappversionoverrides" xsi:type="TaskPaneApp">
+  <Id>05c2e1c9-3e1d-406e-9a91-e9ac64854001</Id>
+  <Version>1.1.0.0</Version>
+  <ProviderName>Dionattan Coutrin Figueiredo</ProviderName>
+  <DefaultLocale>pt-BR</DefaultLocale>
+  <DisplayName DefaultValue="Assistente Jurídico IA"/>
+  <Description DefaultValue="Um assistente jurídico alimentado por IA para ajudar na redação e análise de documentos jurídicos."/>
+  <IconUrl DefaultValue="https://raw.githubusercontent.com/DionattanCF/ai_word/main/assets/icon-32.png"/>
+  <HighResolutionIconUrl DefaultValue="https://raw.githubusercontent.com/DionattanCF/ai_word/main/assets/icon-64.png"/>
+  <SupportUrl DefaultValue="https://www.linkedin.com/in/dionattan-figueiredo/"/>
+  <AppDomains>
+    <AppDomain>https://github.com/DionattanCF/ai_word</AppDomain>
+  </AppDomains>
+  <Hosts>
+    <Host Name="Document"/>
+  </Hosts>
+  <DefaultSettings>
+    <SourceLocation DefaultValue="https://dionattancf.github.io/ai_word/index.html"/>
+  </DefaultSettings>
+  <Permissions>ReadWriteDocument</Permissions>
+  <VersionOverrides xmlns="http://schemas.microsoft.com/office/taskpaneappversionoverrides" xsi:type="VersionOverridesV1_0">
     <Hosts>
-        <Host Name="Document"/>
+      <Host xsi:type="Document">
+        <DesktopFormFactor>
+          <GetStarted>
+            <Title resid="GetStarted.Title"/>
+            <Description resid="GetStarted.Description"/>
+            <LearnMoreUrl resid="GetStarted.LearnMoreUrl"/>
+          </GetStarted>
+          <FunctionFile resid="Commands.Url"/>
+          <ExtensionPoint xsi:type="PrimaryCommandSurface">
+            <OfficeTab id="TabHome">
+              <Group id="CommandsGroup">
+                <Label resid="CommandsGroup.Label"/>
+                <Icon>
+                  <bt:Image size="16" resid="Icon.16x16"/>
+                  <bt:Image size="32" resid="Icon.32x32"/>
+                  <bt:Image size="80" resid="Icon.80x80"/>
+                </Icon>
+                <Control xsi:type="Button" id="TaskpaneButton">
+                  <Label resid="TaskpaneButton.Label"/>
+                  <Supertip>
+                    <Title resid="TaskpaneButton.Label"/>
+                    <Description resid="TaskpaneButton.Tooltip"/>
+                  </Supertip>
+                  <Icon>
+                    <bt:Image size="16" resid="Icon.16x16"/>
+                    <bt:Image size="32" resid="Icon.32x32"/>
+                    <bt:Image size="80" resid="Icon.80x80"/>
+                  </Icon>
+                  <Action xsi:type="ShowTaskpane">
+                    <TaskpaneId>ButtonId1</TaskpaneId>
+                    <SourceLocation resid="Taskpane.Url"/>
+                  </Action>
+                </Control>
+              </Group>
+            </OfficeTab>
+          </ExtensionPoint>
+        </DesktopFormFactor>
+      </Host>
     </Hosts>
-    <DefaultSettings>
-        <SourceLocation DefaultValue="https://dionattancf.github.io/ai_word/index-dist.html"/>
-    </DefaultSettings>
-    <Permissions>ReadWriteDocument</Permissions>
+    <Resources>
+      <bt:Images>
+        <bt:Image id="Icon.16x16" DefaultValue="https://raw.githubusercontent.com/DionattanCF/ai_word/main/assets/icon-16.png"/>
+        <bt:Image id="Icon.32x32" DefaultValue="https://raw.githubusercontent.com/DionattanCF/ai_word/main/assets/icon-32.png"/>
+        <bt:Image id="Icon.80x80" DefaultValue="https://raw.githubusercontent.com/DionattanCF/ai_word/main/assets/icon-80.png"/>
+      </bt:Images>
+      <bt:Urls>
+        <bt:Url id="GetStarted.LearnMoreUrl" DefaultValue="https://github.com/DionattanCF/ai_word"/>
+        <bt:Url id="Commands.Url" DefaultValue="https://dionattancf.github.io/ai_word/index.html"/>
+        <bt:Url id="Taskpane.Url" DefaultValue="https://dionattancf.github.io/ai_word/index.html"/>
+      </bt:Urls>
+      <bt:ShortStrings>
+        <bt:String id="GetStarted.Title" DefaultValue="Assistente Jurídico IA"/>
+        <bt:String id="CommandsGroup.Label" DefaultValue="Assistente Jurídico IA"/>
+        <bt:String id="TaskpaneButton.Label" DefaultValue="Assistente Jurídico IA"/>
+      </bt:ShortStrings>
+      <bt:LongStrings>
+        <bt:String id="GetStarted.Description" DefaultValue="O Assistente Jurídico IA está pronto para ajudar."/>
+        <bt:String id="TaskpaneButton.Tooltip" DefaultValue="Clique para abrir o Assistente Jurídico IA"/>
+      </bt:LongStrings>
+    </Resources>
+  </VersionOverrides>
 </OfficeApp> 
