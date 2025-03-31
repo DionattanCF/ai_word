@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <title>Assistente Jurídico IA - Coutrin e Figueiredo Advogados</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js" type="text/javascript"></script>
+</head>
+<body>
+    <div id="content-main">
+        <div class="padding">
+            <h1>Assistente Jurídico IA - Coutrin e Figueiredo Advogados</h1>
+            
+            <!-- Seção de Ferramentas -->
+            <div class="tools-section">
+                <h2>Ferramentas</h2>
+                <div class="button-group">
+                    <button id="rewriteBtn" class="ms-Button ms-Button--primary">
+                        <span class="ms-Button-label">Reescrever</span>
+                    </button>
+                    <button id="summarizeBtn" class="ms-Button ms-Button--primary">
+                        <span class="ms-Button-label">Resumir</span>
+                    </button>
+                    <button id="counterArgBtn" class="ms-Button ms-Button--primary">
+                        <span class="ms-Button-label">Contra-Argumento</span>
+                    </button>
+                    <button id="simplifyBtn" class="ms-Button ms-Button--primary">
+                        <span class="ms-Button-label">Simplificar</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Seção de Chat -->
+            <div class="chat-section">
+                <h2>Chat Personalizado</h2>
+                <div id="chatMessages" class="chat-messages"></div>
+                <div class="chat-input">
+                    <textarea id="customPrompt" placeholder="Digite sua instrução para o assistente..."></textarea>
+                    <button id="sendPromptBtn" class="ms-Button ms-Button--primary">
+                        <span class="ms-Button-label">Enviar</span>
+                    </button>
+                </div>
+                <button id="applyChatResponseBtn" class="ms-Button ms-Button--primary">
+                    <span class="ms-Button-label">Aplicar Resposta</span>
+                </button>
+            </div>
+
+            <!-- Seção de Resposta -->
+            <div class="response-section">
+                <h2>Resposta do Assistente</h2>
+                <div id="aiResponse" class="response-box"></div>
+                <button id="applyBtn" class="ms-Button ms-Button--primary">
+                    <span class="ms-Button-label">Aplicar ao Documento</span>
+                </button>
+            </div>
+
+            <!-- Indicador de Carregamento -->
+            <div id="loadingIndicator" class="loading-indicator">
+                <div class="spinner"></div>
+                <span>Processando...</span>
+            </div>
+        </div>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html> 
