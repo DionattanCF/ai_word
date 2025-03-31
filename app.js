@@ -6,7 +6,7 @@
 'use strict';
 
 const defaultConfig = {
-    apiKey: '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',
+    apiKey: '', // A chave API deve ser configurada via interface do usuário
     instructions: 'Você é um assistente jurídico especializado em direito eleitoral brasileiro. Seu objetivo é ajudar na análise e redação de documentos jurídicos, fornecendo sugestões precisas e fundamentadas na legislação eleitoral vigente.'
 };
 
@@ -19,8 +19,14 @@ Office.onReady((info) => {
 });
 
 function initializeApp() {
+    // Tenta carregar a chave API do localStorage
+    const savedApiKey = localStorage.getItem('openaiApiKey');
+    if (savedApiKey) {
+        defaultConfig.apiKey = savedApiKey;
+    }
+
     if (!defaultConfig.apiKey) {
-        showError('Por favor, configure sua chave API no arquivo app.js');
+        showError('Por favor, configure sua chave API nas configurações');
         return;
     }
 
@@ -192,6 +198,17 @@ function loadSettings() {
 
 async function saveApiKey() {
     const apiKey = document.getElementById('apiKey').value;
+    if (!apiKey) {
+        showError('Por favor, insira uma chave API válida');
+        return;
+    }
+    
     localStorage.setItem('openaiApiKey', apiKey);
-    alert('Chave API salva com sucesso!');
+    defaultConfig.apiKey = apiKey; // Atualiza a configuração atual
+    showResponse('Chave API salva com sucesso!');
+    
+    // Recarrega a página após 2 segundos
+    setTimeout(() => {
+        location.reload();
+    }, 2000);
 } 
