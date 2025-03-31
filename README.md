@@ -1,103 +1,62 @@
-# Assistente Jurídico IA para Word
+# Assistente Jurídico IA para Microsoft Word
 
-Este é um complemento do Microsoft Word que integra a API da OpenAI para auxiliar advogados na redação e edição de documentos jurídicos.
+Um add-in para Microsoft Word que utiliza IA para auxiliar advogados na redação e revisão de documentos jurídicos.
 
 ## Funcionalidades
 
-- Reescrever texto com IA
-- Resumir textos jurídicos
-- Gerar contra-argumentos
-- Simplificar linguagem técnica
-- **Chat personalizado com IA**: Envie instruções específicas sobre como deseja que a IA processe seu texto
+- **Reescrever**: Melhora a clareza e profissionalismo do texto jurídico
+- **Resumir**: Cria resumos concisos de textos jurídicos
+- **Contra-Argumento**: Gera contra-argumentos jurídicos
+- **Simplificar**: Torna a linguagem técnica mais acessível
+- **Chat Personalizado**: Permite interação direta com a IA para solicitações específicas
 
-## Requisitos
+## Configurações
 
-- Microsoft Word (versão desktop ou web)
-- Chave de API da OpenAI
-- Node.js (versão 14 ou superior)
-- npm (normalmente instalado com o Node.js)
+O add-in oferece uma seção de configurações onde você pode:
 
-## Instalação e Configuração
+1. **Chave API OpenAI**: Configurar sua chave de API para acessar os serviços da OpenAI
+2. **Modelo GPT**: Escolher entre diferentes modelos GPT:
+   - GPT-3.5 Turbo (padrão)
+   - GPT-4
+   - GPT-4 Turbo
+3. **Prompts Personalizados**: Adicionar instruções personalizadas que serão incluídas em todas as interações com a IA
 
-### Passo 1: Preparar o Ambiente
+## Instalação
 
-1. Instale o Node.js (versão 14 ou superior) do site oficial: https://nodejs.org/
-
-2. Instale os certificados de desenvolvimento (necessário para HTTPS local):
-   ```bash
-   npm install -g office-addin-dev-certs
-   office-addin-dev-certs install
-   ```
-
-### Passo 2: Configurar o Projeto
-
-1. Clone/baixe este repositório em sua máquina
-
-2. Abra um terminal na pasta do projeto e instale as dependências:
+1. Clone este repositório
+2. Abra o projeto no Visual Studio Code
+3. Instale as dependências:
    ```bash
    npm install
    ```
-
-3. Compile o projeto:
-   ```bash
-   npm run build
-   ```
-
-### Passo 3: Iniciar o Servidor de Desenvolvimento
-
-1. Inicie o servidor local:
+4. Execute o projeto:
    ```bash
    npm start
    ```
 
-2. Este comando abrirá o Word e sideloading do complemento será feito automaticamente
-   Se não abrir automaticamente, siga o Passo 4 abaixo
+## Uso
 
-### Passo 4: Inserir o Complemento no Word (se não abrir automaticamente)
+1. Abra o Microsoft Word
+2. Selecione o texto que deseja processar
+3. Escolha uma das opções disponíveis:
+   - Clique em um dos botões de ação (Reescrever, Resumir, etc.)
+   - Use o chat personalizado para solicitações específicas
+4. Revise a resposta da IA
+5. Clique em "Aplicar ao Documento" para inserir a resposta
 
-#### Para o Word Desktop:
+## Requisitos
 
-1. Abra o Word
-2. Vá para a guia "Inserir"
-3. Clique em "Meus Suplementos" ou "Suplementos"
-4. Selecione "Gerenciar Meus Suplementos"
-5. Clique em "Suplementos de Desenvolvedor" 
-6. Clique em "Procurar" e selecione o arquivo `manifest.xml` na pasta do projeto
-7. Clique em "OK"
+- Microsoft Word (versão desktop)
+- Navegador moderno com suporte a JavaScript
+- Chave API OpenAI válida
 
-#### Para o Word Online:
+## Contribuição
 
-1. Abra o Word Online (office.com)
-2. Crie ou abra um documento
-3. Vá para a guia "Inserir"
-4. Clique em "Suplementos"
-5. Selecione "Gerenciar Meus Suplementos" > "Carregar Meu Suplemento"
-6. Clique em "Procurar" e selecione o arquivo `manifest.xml` do projeto
-7. Clique em "Carregar"
+Contribuições são bem-vindas! Por favor, sinta-se à vontade para submeter pull requests.
 
-### Passo 5: Usar o Complemento
+## Licença
 
-1. Depois que o complemento estiver carregado, você verá o painel lateral com a interface
-2. Insira sua chave de API da OpenAI no campo designado e clique em "Salvar Chave"
-3. Selecione algum texto no documento do Word
-4. Use os botões ou o chat para interagir com a IA
-5. Clique em "Aplicar ao Documento" para inserir a resposta da IA no documento
-
-## Como Usar
-
-1. Abra o Word e selecione o texto que deseja processar
-2. Use as funcionalidades pré-definidas clicando em um dos botões no painel lateral:
-   - "Reescrever com IA"
-   - "Resumir"
-   - "Gerar Contra-argumento"
-   - "Simplificar Linguagem"
-3. Ou use o **chat personalizado**:
-   - Selecione o texto que deseja processar
-   - Digite uma instrução específica no campo de texto do chat
-   - Clique em "Enviar" ou pressione Enter
-   - Aguarde a resposta da IA
-   - Use o botão "Aplicar Resposta ao Documento" para substituir o texto selecionado
-4. Para as ações pré-definidas, aguarde a resposta da IA e clique em "Aplicar ao Documento" para substituir o texto selecionado
+Este projeto está licenciado sob a MIT License - veja o arquivo [LICENSE](LICENSE) para detalhes.
 
 ## Solução de Problemas
 

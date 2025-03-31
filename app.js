@@ -19,12 +19,50 @@ Office.onReady(() => {
         }
     });
 
+    // Inicializar configurações
+    document.getElementById('saveSettings').onclick = saveSettings;
+    loadSettings();
+
     // Load saved API key
     const savedApiKey = localStorage.getItem('openaiApiKey');
     if (savedApiKey) {
         document.getElementById('apiKey').value = savedApiKey;
     }
 });
+
+// Funções de configuração
+function saveSettings() {
+    const settings = {
+        apiKey: document.getElementById('apiKey').value,
+        gptModel: document.getElementById('gptModel').value,
+        customPrompts: document.getElementById('customPrompts').value
+    };
+    
+    localStorage.setItem('aiAssistantSettings', JSON.stringify(settings));
+    alert('Configurações salvas com sucesso!');
+}
+
+function loadSettings() {
+    const savedSettings = localStorage.getItem('aiAssistantSettings');
+    if (savedSettings) {
+        const settings = JSON.parse(savedSettings);
+        document.getElementById('apiKey').value = settings.apiKey || '';
+        document.getElementById('gptModel').value = settings.gptModel || 'gpt-3.5-turbo';
+        document.getElementById('customPrompts').value = settings.customPrompts || '';
+    }
+}
+
+function getSettings() {
+    const savedSettings = localStorage.getItem('aiAssistantSettings');
+    if (savedSettings) {
+        return JSON.parse(savedSettings);
+    }
+    return {
+        apiKey: '',
+        gptModel: 'gpt-3.5-turbo',
+        customPrompts: ''
+    };
+}
 
 async function saveApiKey() {
     const apiKey = document.getElementById('apiKey').value;
@@ -44,9 +82,9 @@ async function getSelectedText() {
 }
 
 async function processText(action) {
-    const apiKey = localStorage.getItem('openaiApiKey');
-    if (!apiKey) {
-        alert('Por favor, insira sua chave API OpenAI primeiro.');
+    const settings = getSettings();
+    if (!settings.apiKey) {
+        alert('Por favor, configure sua chave API nas configurações.');
         return;
     }
 
@@ -59,7 +97,7 @@ async function processText(action) {
         }
 
         const prompt = getPromptForAction(action, selectedText);
-        const response = await callOpenAI(apiKey, prompt);
+        const response = await callOpenAI(settings.apiKey, prompt, settings.gptModel);
         
         document.getElementById('aiResponse').innerText = response;
     } catch (error) {
@@ -71,20 +109,30 @@ async function processText(action) {
 }
 
 function getPromptForAction(action, text) {
-    const prompts = {
+    const settings = getSettings();
+    const customPrompts = settings.customPrompts.split('\n').filter(p => p.trim());
+    
+    const defaultPrompts = {
         rewrite: `Reescreva o seguinte texto jurídico de forma mais clara e profissional, mantendo o mesmo significado: "${text}"`,
         summarize: `Faça um resumo conciso do seguinte texto jurídico: "${text}"`,
         counterArg: `Gere um contra-argumento jurídico forte para o seguinte texto: "${text}"`,
         simplify: `Simplifique a linguagem técnica do seguinte texto jurídico, tornando-o mais acessível: "${text}"`
     };
-    return prompts[action];
+
+    // Se houver prompts personalizados, adicione-os ao prompt padrão
+    if (customPrompts.length > 0) {
+        const customInstructions = customPrompts.join('\n');
+        return `${customInstructions}\n\n${defaultPrompts[action]}`;
+    }
+
+    return defaultPrompts[action];
 }
 
 // Função para enviar um prompt personalizado
 async function sendCustomPrompt() {
-    const apiKey = localStorage.getItem('openaiApiKey');
-    if (!apiKey) {
-        alert('Por favor, insira sua chave API OpenAI primeiro.');
+    const settings = getSettings();
+    if (!settings.apiKey) {
+        alert('Por favor, configure sua chave API nas configurações.');
         return;
     }
 
@@ -114,7 +162,7 @@ async function sendCustomPrompt() {
         const fullPrompt = `${promptText}\n\nTexto selecionado: "${selectedText}"`;
         
         // Chamar a API
-        const response = await callOpenAI(apiKey, fullPrompt);
+        const response = await callOpenAI(settings.apiKey, fullPrompt, settings.gptModel);
         
         // Adicionar resposta ao chat
         addMessageToChat('ai', response);
@@ -171,7 +219,7 @@ async function applyChatResponse() {
     });
 }
 
-async function callOpenAI(apiKey, prompt) {
+async function callOpenAI(apiKey, prompt, model) {
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
         method: 'POST',
         headers: {
@@ -179,7 +227,7 @@ async function callOpenAI(apiKey, prompt) {
             'Authorization': `Bearer ${apiKey}`
         },
         body: JSON.stringify({
-            model: "gpt-3.5-turbo",
+            model: model,
             messages: [
                 {
                     role: "system",

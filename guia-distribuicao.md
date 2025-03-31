@@ -1,97 +1,126 @@
 # Guia de Distribuição do Assistente Jurídico IA
 
-Este documento explica como distribuir o complemento "Assistente Jurídico IA" para usuários do Microsoft Word.
+Este guia fornece instruções detalhadas para distribuir o add-in Assistente Jurídico IA para Microsoft Word.
 
-## Opções de Hospedagem
+## Preparação
 
-Para distribuir o complemento, você precisa hospedar os arquivos em um servidor web com HTTPS. Existem várias opções:
+### 1. Arquivos Necessários
 
-### 1. GitHub Pages (Grátis)
+Certifique-se de ter os seguintes arquivos:
 
-1. Crie um repositório no GitHub
-2. Faça upload dos arquivos da pasta `dist-package` 
-3. Ative o GitHub Pages nas configurações do repositório
-4. Use o branch principal ou crie um branch específico para gh-pages
+- `manifest.xml`: Arquivo de manifesto do add-in
+- `index-dist.html`: Interface do usuário
+- `app.js`: Lógica do add-in
+- `styles.css`: Estilos da interface
+- `README-distribuicao.md`: Documentação de distribuição
 
-### 2. Netlify/Vercel (Grátis)
+### 2. Configuração do GitHub
 
-1. Crie uma conta no Netlify ou Vercel
-2. Faça upload da pasta `dist-package` como um novo site
-3. O serviço fornecerá automaticamente um domínio HTTPS
+1. Crie um novo repositório no GitHub
+2. Faça upload dos arquivos do add-in
+3. Ative o GitHub Pages:
+   - Vá para Settings > Pages
+   - Selecione a branch `main`
+   - Escolha a pasta raiz
+   - Clique em Save
 
-### 3. Servidor Web Próprio
+### 3. Atualização do Manifest
 
-Se você possui um servidor web, basta:
-1. Fazer upload dos arquivos para um diretório acessível via web
-2. Certificar-se de que o servidor tem certificado HTTPS válido
-
-## Preparando o Manifest para Distribuição
-
-Após hospedar os arquivos, você precisa editar o arquivo `assistente-juridico-ia.xml` para apontar para a URL correta:
-
-1. Abra o arquivo `assistente-juridico-ia.xml`
-2. Localize as seguintes linhas:
+1. Abra o arquivo `manifest.xml`
+2. Atualize as URLs para apontar para seu repositório:
    ```xml
-   <IconUrl DefaultValue="https://SEU_USUARIO.github.io/SEU_REPOSITORIO/assets/icon-32.png"/>
-   <HighResolutionIconUrl DefaultValue="https://SEU_USUARIO.github.io/SEU_REPOSITORIO/assets/hi-res-icon.png"/>
-   <SourceLocation DefaultValue="https://SEU_USUARIO.github.io/SEU_REPOSITORIO/index.html"/>
+   <SourceLocation DefaultValue="https://SEU_USUARIO.github.io/SEU_REPOSITORIO/index-dist.html" />
    ```
-3. Substitua as URLs pelos endereços reais onde você hospedou os arquivos
-4. Salve o arquivo
+3. Verifique se todas as URLs de recursos estão corretas
 
-## Distribuição para Usuários
+## Testes
 
-Existem várias formas de distribuir o complemento para os usuários:
+### 1. Validação do Manifest
 
-### 1. Distribuição Individual (Para Pequenos Grupos)
+Use o [Office Add-in Validator](https://validator.officeaddin.com/) para verificar:
+- URLs válidas
+- Recursos acessíveis
+- Configurações corretas
 
-1. Envie o arquivo `assistente-juridico-ia.xml` por email
-2. Forneça as instruções do arquivo `instrucoes-instalacao.md`
+### 2. Testes Funcionais
 
-### 2. Distribuição Centralizada (Para Organizações)
+Verifique se todas as funcionalidades estão operando:
+- Configurações
+  - Salvar chave API
+  - Selecionar modelo GPT
+  - Adicionar prompts personalizados
+- Ferramentas
+  - Reescrever
+  - Resumir
+  - Contra-argumento
+  - Simplificar
+- Chat personalizado
+- Aplicação de respostas
 
-Para organizações com Microsoft 365:
+### 3. Testes de Segurança
 
-1. Acesse o Centro de Administração do Microsoft 365
-2. Vá para Configurações > Serviços e suplementos
-3. Clique em "Implantar suplemento"
-4. Faça upload do arquivo `assistente-juridico-ia.xml`
-5. Selecione os usuários que devem receber o complemento
+- Verifique se as chaves API estão seguras
+- Confirme que todas as comunicações usam HTTPS
+- Teste o armazenamento local de configurações
 
-### 3. Via Intranet ou Compartilhamento Interno
+## Distribuição
 
-1. Disponibilize o arquivo XML na intranet ou sistema interno
-2. Crie uma página com as instruções de instalação
-3. Os usuários podem baixar e instalar conforme necessário
+### 1. Compartilhamento
 
-## Atualizações do Complemento
+1. Compartilhe o link do manifest.xml
+2. Forneça instruções de instalação
+3. Inclua informações sobre configurações
 
-Para atualizar o complemento:
+### 2. Instruções para Usuários
 
-1. Faça as alterações necessárias no código
-2. Execute o script `create-package.sh` para gerar um novo pacote
-3. Faça upload dos novos arquivos para seu servidor
-4. Atualize a versão no arquivo XML (`<Version>1.0.0.0</Version>`)
-5. Se necessário, redistribua o novo arquivo XML
+#### Instalação
 
-## Considerações de Segurança
+1. Abra o Microsoft Word
+2. Vá para Inserir > Meus Suplementos
+3. Clique em Gerenciar Meus Suplementos
+4. Selecione Suplementos de Desenvolvedor
+5. Cole o URL do manifest.xml
+6. Clique em OK
 
-- A chave da API OpenAI é armazenada localmente no navegador do usuário
-- O texto dos documentos é processado diretamente pela API OpenAI
-- Considere políticas de privacidade da sua organização antes de distribuir
+#### Configuração
 
-## Suporte Técnico
+1. Abra o add-in
+2. Na seção Configurações:
+   - Insira sua chave API OpenAI
+   - Escolha o modelo GPT
+   - Adicione prompts personalizados
+3. Salve as configurações
 
-Prepare-se para fornecer suporte aos usuários relacionado a:
-- Instalação do complemento
-- Configuração da chave API
-- Problemas de conectividade
-- Dúvidas sobre funcionalidade
+### 3. Suporte
 
-## Personalização para sua Organização
+Forneça informações de contato para suporte:
+- Email de suporte
+- Link do repositório GitHub
+- Documentação de solução de problemas
 
-Você pode personalizar o complemento antes da distribuição:
-- Altere o nome (`DisplayName`) 
-- Modifique os ícones
-- Ajuste o sistema interno de prompts no arquivo JavaScript
-- Customize o visual para corresponder à identidade da sua organização 
+## Manutenção
+
+### 1. Atualizações
+
+1. Faça alterações no código
+2. Atualize os arquivos de distribuição
+3. Faça commit e push
+4. Teste em produção
+
+### 2. Monitoramento
+
+- Verifique logs de erro
+- Monitore uso da API
+- Colete feedback dos usuários
+
+### 3. Segurança
+
+- Mantenha as dependências atualizadas
+- Monitore vulnerabilidades
+- Atualize certificados SSL
+
+## Recursos Adicionais
+
+- [Documentação do Office Add-ins](https://docs.microsoft.com/en-us/office/dev/add-ins/)
+- [Guia de Segurança](https://docs.microsoft.com/en-us/office/dev/add-ins/concepts/security)
+- [Exemplos de Código](https://github.com/OfficeDev/Office-Add-in-samples) 
