@@ -1,1 +1,47 @@
- 
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Assistente Jurídico IA - Dionattan Coutrin Figueiredo</title>
+
+    <!-- Office JavaScript API -->
+    <script type="text/javascript" src="https://appsforoffice.microsoft.com/lib/1.1/hosted/office.js"></script>
+
+    <!-- For more information on Fluent UI, visit https://developer.microsoft.com/fluentui#/. -->
+    <link rel="stylesheet" href="https://static2.sharepointonline.com/files/fabric/office-ui-fabric-core/11.0.0/css/fabric.min.css"/>
+
+    <!-- Template styles -->
+    <link href="styles.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body class="ms-font-m ms-welcome ms-Fabric">
+    <div class="header">
+        <h1>Assistente Jurídico IA</h1>
+    </div>
+
+    <div class="main-content">
+        <div id="selected-text"></div>
+        
+        <div class="button-group">
+            <button onclick="processText('rewrite')">Reescrever</button>
+            <button onclick="processText('summarize')">Resumir</button>
+            <button onclick="processText('counter')">Contra-Argumento</button>
+            <button onclick="processText('simplify')">Simplificar</button>
+        </div>
+
+        <div class="chat-section">
+            <textarea id="chat-input" placeholder="Digite suas instruções para o assistente..."></textarea>
+            <button onclick="processText('chat')">Enviar</button>
+        </div>
+
+        <div id="response">
+            <h3>Resposta do Assistente</h3>
+            <div id="response-content"></div>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="app.js"></script>
+</body>
+</html> 
