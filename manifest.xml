@@ -8,7 +8,7 @@
     <Version>1.0.0.0</Version>
     <ProviderName>Legal AI Assistant</ProviderName>
     <DefaultLocale>pt-BR</DefaultLocale>
-    <DisplayName DefaultValue="Assistente Jurídico IA" />
+    <DisplayName DefaultValue="Assistente Jurídico IA - Coutrin & Figueiredo Advogados" />
     <Description DefaultValue="Assistente de IA para auxiliar na redação de documentos jurídicos"/>
     <IconUrl DefaultValue="https://dionattancf.github.io/ai_word/assets/icon-32.png"/>
     <HighResolutionIconUrl DefaultValue="https://dionattancf.github.io/ai_word/assets/hi-res-icon.png"/>

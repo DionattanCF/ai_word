@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <title>Assistente Jurídico IA</title>
+    <title>Assistente Jurídico IA - Dionattan Coutrin Figueiredo</title>
     <link rel="stylesheet" href="styles.css">
     <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js" type="text/javascript"></script>
 </head>
 <body>
     <div id="content-main">
         <div class="padding">
-            <h1>Assistente Jurídico IA - Dionattan Coutrin Figueiredo</h1>
+            <h1>Assistente Jurídico IA - Coutrin & Figueiredo Advogados</h1>
             
             <!-- Seção de Configurações -->
             <div class="settings-section">
@@ -22,17 +22,8 @@
                     </div>
                     
                     <div class="form-group">
-                        <label for="gptModel">Modelo GPT:</label>
-                        <select id="gptModel">
-                            <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
-                            <option value="gpt-4">GPT-4</option>
-                            <option value="gpt-4-turbo-preview">GPT-4 Turbo</option>
-                        </select>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="customPrompts">Prompts Personalizados (um por linha):</label>
-                        <textarea id="customPrompts" placeholder="Digite seus prompts personalizados aqui, um por linha"></textarea>
+                        <label for="assistantInstructions">Instruções do Assistente:</label>
+                        <textarea id="assistantInstructions" placeholder="Instruções personalizadas para o assistente..."></textarea>
                     </div>
                     
                     <button id="saveSettings" class="ms-Button ms-Button--primary">
@@ -65,7 +56,7 @@
                 <h2>Chat Personalizado</h2>
                 <div id="chatMessages" class="chat-messages"></div>
                 <div class="chat-input">
-                    <textarea id="customPrompt" placeholder="Digite sua instrução para a IA..."></textarea>
+                    <textarea id="customPrompt" placeholder="Digite sua instrução para o assistente..."></textarea>
                     <button id="sendPromptBtn" class="ms-Button ms-Button--primary">
                         <span class="ms-Button-label">Enviar</span>
                     </button>
@@ -77,7 +68,7 @@
 
             <!-- Seção de Resposta -->
             <div class="response-section">
-                <h2>Resposta da IA</h2>
+                <h2>Resposta do Assistente</h2>
                 <div id="aiResponse" class="response-box"></div>
                 <button id="applyBtn" class="ms-Button ms-Button--primary">
                     <span class="ms-Button-label">Aplicar ao Documento</span>
