@@ -6,278 +6,160 @@
 'use strict';
 
 const defaultConfig = {
-    apiKey: '', // A chave API será configurada localmente
-    instructions: `Você é um assistente jurídico especializado em direito eleitoral brasileiro. 
-    Seu objetivo é ajudar na análise e redação de documentos jurídicos, fornecendo sugestões 
-    precisas e fundamentadas na legislação eleitoral vigente.`
+    apiKey: '', // Adicione sua chave API aqui
+    instructions: 'Você é um assistente jurídico especializado em análise e redação de documentos legais.'
 };
 
-let Office = window.Office;
-
-// Garantir que o Office.js está carregado antes de inicializar
-if (window.Office) {
-    initializeApp();
-} else {
-    window.addEventListener('load', () => {
-        if (window.Office) {
-            initializeApp();
-        } else {
-            showError('Erro: Office.js não foi carregado corretamente.');
-        }
-    });
-}
+Office.onReady((info) => {
+    if (info.host === Office.HostType.Word) {
+        initializeApp();
+    } else {
+        showError('Este suplemento só funciona no Microsoft Word.');
+    }
+});
 
 function initializeApp() {
-    try {
-        Office.onReady(info => {
-            if (info.host === Office.HostType.Word) {
-                const responseContent = document.getElementById('response-content');
-                if (responseContent) {
-                    responseContent.innerHTML = 'Bem-vindo ao Assistente Jurídico IA!';
-                }
-                
-                // Verificar se a chave API está configurada
-                if (!defaultConfig.apiKey) {
-                    showError('Por favor, configure sua chave API no arquivo app.js');
-                }
-            } else {
-                showError('Este add-in funciona apenas no Microsoft Word.');
-            }
-        });
-    } catch (error) {
-        showError('Erro ao inicializar o add-in: ' + error.message);
+    if (!defaultConfig.apiKey) {
+        showError('Por favor, configure sua chave API no arquivo app.js');
+        return;
     }
-}
 
-function showError(message) {
-    const responseContent = document.getElementById('response-content');
-    if (responseContent) {
-        responseContent.innerHTML = `<div class="error">${message}</div>`;
-    } else {
-        console.error(message);
-    }
+    // Adiciona listeners para todos os botões
+    document.querySelectorAll('button[data-action]').forEach(button => {
+        button.addEventListener('click', (event) => {
+            const action = event.currentTarget.getAttribute('data-action');
+            processText(action);
+        });
+    });
 }
 
 async function getSelectedText() {
-    return new Promise((resolve, reject) => {
-        Office.context.document.getSelectedDataAsync(Office.CoercionType.Text, result => {
-            if (result.status === Office.AsyncResultStatus.Succeeded) {
-                resolve(result.value);
-            } else {
-                reject(new Error('Erro ao obter o texto selecionado'));
-            }
+    try {
+        return await Word.run(async (context) => {
+            const range = context.document.getSelection();
+            range.load('text');
+            await context.sync();
+            return range.text;
         });
-    });
+    } catch (error) {
+        showError('Erro ao obter o texto selecionado: ' + error.message);
+        return null;
+    }
 }
 
 async function insertText(text) {
-    return new Promise((resolve, reject) => {
-        Office.context.document.setSelectedDataAsync(text, { coercionType: Office.CoercionType.Text }, result => {
-            if (result.status === Office.AsyncResultStatus.Succeeded) {
-                resolve();
-            } else {
-                reject(new Error('Erro ao inserir o texto'));
-            }
+    try {
+        await Word.run(async (context) => {
+            const range = context.document.getSelection();
+            range.insertText(text, 'Replace');
+            await context.sync();
         });
-    });
-}
-
-async function createAssistant(apiKey) {
-    const response = await fetch('https://api.openai.com/v1/assistants', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${apiKey}`,
-            'OpenAI-Beta': 'assistants=v1'
-        },
-        body: JSON.stringify({
-            name: "Assistente Jurídico",
-            instructions: defaultConfig.instructions,
-            model: "gpt-4-turbo-preview",
-            tools: [
-                { type: "retrieval" },
-                { type: "code_interpreter" }
-            ]
-        })
-    });
-
-    if (!response.ok) {
-        throw new Error('Erro ao criar o assistente');
-    }
-
-    return await response.json();
-}
-
-async function createThread(apiKey) {
-    const response = await fetch('https://api.openai.com/v1/threads', {
-        method: 'POST',
-        headers: {
-            'Authorization': `Bearer ${apiKey}`,
-            'OpenAI-Beta': 'assistants=v1'
-        }
-    });
-
-    if (!response.ok) {
-        throw new Error('Erro ao criar o thread');
-    }
-
-    return await response.json();
-}
-
-async function addMessageToThread(apiKey, threadId, content) {
-    const response = await fetch(`https://api.openai.com/v1/threads/${threadId}/messages`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${apiKey}`,
-            'OpenAI-Beta': 'assistants=v1'
-        },
-        body: JSON.stringify({
-            role: "user",
-            content: content
-        })
-    });
-
-    if (!response.ok) {
-        throw new Error('Erro ao adicionar mensagem ao thread');
-    }
-
-    return await response.json();
-}
-
-async function runAssistant(apiKey, threadId, assistantId) {
-    const response = await fetch(`https://api.openai.com/v1/threads/${threadId}/runs`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${apiKey}`,
-            'OpenAI-Beta': 'assistants=v1'
-        },
-        body: JSON.stringify({
-            assistant_id: assistantId
-        })
-    });
-
-    if (!response.ok) {
-        throw new Error('Erro ao executar o assistente');
-    }
-
-    return await response.json();
-}
-
-async function getThreadMessages(apiKey, threadId) {
-    const response = await fetch(`https://api.openai.com/v1/threads/${threadId}/messages`, {
-        headers: {
-            'Authorization': `Bearer ${apiKey}`,
-            'OpenAI-Beta': 'assistants=v1'
-        }
-    });
-
-    if (!response.ok) {
-        throw new Error('Erro ao obter mensagens do thread');
-    }
-
-    return await response.json();
-}
-
-async function waitForRunCompletion(apiKey, threadId, runId) {
-    while (true) {
-        const response = await fetch(`https://api.openai.com/v1/threads/${threadId}/runs/${runId}`, {
-            headers: {
-                'Authorization': `Bearer ${apiKey}`,
-                'OpenAI-Beta': 'assistants=v1'
-            }
-        });
-
-        if (!response.ok) {
-            throw new Error('Erro ao verificar status do run');
-        }
-
-        const run = await response.json();
-        if (run.status === 'completed') {
-            return true;
-        } else if (run.status === 'failed' || run.status === 'cancelled') {
-            throw new Error(`Run ${run.status}`);
-        }
-
-        await new Promise(resolve => setTimeout(resolve, 1000));
+    } catch (error) {
+        showError('Erro ao inserir o texto: ' + error.message);
     }
 }
 
 async function processText(action) {
-    try {
-        const responseContent = document.getElementById('response-content');
-        responseContent.innerHTML = 'Processando...';
-
-        const apiKey = defaultConfig.apiKey;
-        if (!apiKey) {
-            throw new Error('Chave API não configurada');
-        }
-
-        let selectedText = await getSelectedText();
-        if (!selectedText && action !== 'chat') {
-            throw new Error('Nenhum texto selecionado');
-        }
-
-        let prompt;
-        const chatInput = document.getElementById('chat-input');
-        
-        switch (action) {
-            case 'rewrite':
-                prompt = `Reescreva o seguinte texto mantendo o mesmo significado, mas melhorando a clareza e a estrutura: ${selectedText}`;
-                break;
-            case 'summarize':
-                prompt = `Faça um resumo conciso do seguinte texto: ${selectedText}`;
-                break;
-            case 'counter':
-                prompt = `Analise o seguinte texto e forneça possíveis contra-argumentos jurídicos: ${selectedText}`;
-                break;
-            case 'simplify':
-                prompt = `Simplifique o seguinte texto jurídico, tornando-o mais acessível sem perder o significado legal: ${selectedText}`;
-                break;
-            case 'chat':
-                if (!chatInput.value.trim()) {
-                    throw new Error('Digite sua mensagem no chat');
-                }
-                prompt = chatInput.value.trim();
-                break;
-            default:
-                throw new Error('Ação inválida');
-        }
-
-        // Criar assistente e thread
-        const assistant = await createAssistant(apiKey);
-        const thread = await createThread(apiKey);
-
-        // Adicionar mensagem e executar o assistente
-        await addMessageToThread(apiKey, thread.id, prompt);
-        const run = await runAssistant(apiKey, thread.id, assistant.id);
-
-        // Aguardar conclusão e obter resposta
-        await waitForRunCompletion(apiKey, thread.id, run.id);
-        const messages = await getThreadMessages(apiKey, thread.id);
-
-        // Exibir resposta
-        const assistantMessage = messages.data.find(msg => msg.role === 'assistant');
-        if (assistantMessage) {
-            responseContent.innerHTML = assistantMessage.content[0].text.value.replace(/\n/g, '<br>');
-            
-            if (action !== 'chat') {
-                await insertText(assistantMessage.content[0].text.value);
-            }
-        } else {
-            throw new Error('Não foi possível obter a resposta do assistente');
-        }
-
-        // Limpar campo de chat após o envio
-        if (action === 'chat') {
-            chatInput.value = '';
-        }
-
-    } catch (error) {
-        document.getElementById('response-content').innerHTML = `Erro: ${error.message}`;
-        console.error('Erro:', error);
+    const selectedText = await getSelectedText();
+    if (!selectedText) {
+        showError('Por favor, selecione algum texto no documento.');
+        return;
     }
+
+    const chatInput = document.getElementById('chat-input');
+    let userInstruction = '';
+
+    switch (action) {
+        case 'rewrite':
+            userInstruction = 'Reescreva o seguinte texto mantendo o mesmo significado, mas com uma estrutura mais clara e profissional:';
+            break;
+        case 'summarize':
+            userInstruction = 'Faça um resumo conciso do seguinte texto, mantendo os pontos principais:';
+            break;
+        case 'counter':
+            userInstruction = 'Analise o seguinte texto e forneça possíveis contra-argumentos jurídicos:';
+            break;
+        case 'simplify':
+            userInstruction = 'Simplifique o seguinte texto jurídico para uma linguagem mais acessível:';
+            break;
+        case 'chat':
+            userInstruction = chatInput.value || 'Analise o seguinte texto:';
+            break;
+        default:
+            showError('Ação não reconhecida');
+            return;
+    }
+
+    try {
+        showResponse('Processando...');
+        const response = await createThread(userInstruction, selectedText);
+        if (response && response.content) {
+            showResponse(response.content);
+            if (action !== 'counter') { // Não substitui o texto original para contra-argumentos
+                await insertText(response.content);
+            }
+        }
+    } catch (error) {
+        showError('Erro ao processar o texto: ' + error.message);
+    } finally {
+        if (action === 'chat') {
+            chatInput.value = ''; // Limpa o campo de entrada após o envio
+        }
+    }
+}
+
+async function createThread(instruction, text) {
+    try {
+        const response = await fetch('https://api.openai.com/v1/chat/completions', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${defaultConfig.apiKey}`
+            },
+            body: JSON.stringify({
+                model: 'gpt-4',
+                messages: [
+                    {
+                        role: 'system',
+                        content: defaultConfig.instructions
+                    },
+                    {
+                        role: 'user',
+                        content: `${instruction}\n\n${text}`
+                    }
+                ]
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error(`Erro na API: ${response.status}`);
+        }
+
+        const data = await response.json();
+        return {
+            content: data.choices[0].message.content
+        };
+    } catch (error) {
+        throw new Error(`Erro na comunicação com a API: ${error.message}`);
+    }
+}
+
+function showResponse(message) {
+    const responseContent = document.getElementById('response-content');
+    responseContent.textContent = message;
+    responseContent.parentElement.style.display = 'block';
+}
+
+function showError(message) {
+    const responseContent = document.getElementById('response-content');
+    responseContent.textContent = message;
+    responseContent.parentElement.classList.add('error');
+    responseContent.parentElement.style.display = 'block';
+    
+    // Remove a classe de erro após 5 segundos
+    setTimeout(() => {
+        responseContent.parentElement.classList.remove('error');
+    }, 5000);
 }
 
 // Funções de configuração

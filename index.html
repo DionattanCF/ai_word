@@ -10,13 +10,14 @@
     <script type="text/javascript" src="https://appsforoffice.microsoft.com/lib/1.1/hosted/office.js"></script>
 
     <!-- For more information on Fluent UI, visit https://developer.microsoft.com/fluentui#/. -->
-    <link rel="stylesheet" href="https://static2.sharepointonline.com/files/fabric/office-ui-fabric-core/11.0.0/css/fabric.min.css"/>
+    <link rel="stylesheet" href="https://static2.sharepointonline.com/files/fabric/office-ui-fabric-js/1.4.0/css/fabric.min.css" />
+    <link rel="stylesheet" href="https://static2.sharepointonline.com/files/fabric/office-ui-fabric-js/1.4.0/css/fabric.components.min.css" />
 
     <!-- Template styles -->
     <link href="styles.css" rel="stylesheet" type="text/css" />
 </head>
 
-<body class="ms-font-m ms-welcome ms-Fabric">
+<body class="ms-Fabric">
     <div class="header">
         <h1>Assistente Jurídico IA</h1>
     </div>
@@ -25,23 +26,37 @@
         <div id="selected-text"></div>
         
         <div class="button-group">
-            <button onclick="processText('rewrite')">Reescrever</button>
-            <button onclick="processText('summarize')">Resumir</button>
-            <button onclick="processText('counter')">Contra-Argumento</button>
-            <button onclick="processText('simplify')">Simplificar</button>
+            <button data-action="rewrite" class="ms-Button">
+                <span class="ms-Button-label">Reescrever</span>
+            </button>
+            <button data-action="summarize" class="ms-Button">
+                <span class="ms-Button-label">Resumir</span>
+            </button>
+            <button data-action="counter" class="ms-Button">
+                <span class="ms-Button-label">Contra-Argumento</span>
+            </button>
+            <button data-action="simplify" class="ms-Button">
+                <span class="ms-Button-label">Simplificar</span>
+            </button>
         </div>
 
         <div class="chat-section">
-            <textarea id="chat-input" placeholder="Digite suas instruções para o assistente..."></textarea>
-            <button onclick="processText('chat')">Enviar</button>
+            <textarea id="chat-input" class="ms-TextField-field" placeholder="Digite suas instruções para o assistente..."></textarea>
+            <button data-action="chat" class="ms-Button ms-Button--primary">
+                <span class="ms-Button-label">Enviar</span>
+            </button>
         </div>
 
-        <div id="response">
+        <div id="response" class="ms-MessageBar">
             <h3>Resposta do Assistente</h3>
-            <div id="response-content"></div>
+            <div id="response-content" class="ms-MessageBar-text"></div>
         </div>
     </div>
 
+    <!-- Fabric JS -->
+    <script src="https://static2.sharepointonline.com/files/fabric/office-ui-fabric-js/1.4.0/js/fabric.min.js"></script>
+    
+    <!-- Main app code -->
     <script type="text/javascript" src="app.js"></script>
 </body>
 </html> 
