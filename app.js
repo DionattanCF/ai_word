@@ -7,9 +7,7 @@
 
 const defaultConfig = {
     apiKey: '', // Adicione sua chave API aqui
-    instructions: `Você é um assistente jurídico especializado em direito eleitoral brasileiro. 
-    Seu objetivo é ajudar na análise e redação de documentos jurídicos, fornecendo sugestões 
-    precisas e fundamentadas na legislação eleitoral vigente.`
+    instructions: 'Você é um assistente jurídico especializado em direito eleitoral brasileiro. Seu objetivo é ajudar na análise e redação de documentos jurídicos, fornecendo sugestões precisas e fundamentadas na legislação eleitoral vigente.'
 };
 
 Office.onReady((info) => {
