@@ -208,8 +208,18 @@ async function saveApiKey() {
         return;
     }
     
+    // Salva a chave API
     localStorage.setItem('openaiApiKey', apiKey);
     defaultConfig.apiKey = apiKey; // Atualiza a configuração atual
+    
+    // Atualiza as configurações gerais
+    const settings = {
+        apiKey: apiKey,
+        gptModel: 'gpt-4',
+        customPrompts: ''
+    };
+    localStorage.setItem('aiAssistantSettings', JSON.stringify(settings));
+    
     showResponse('Chave API salva com sucesso!');
     
     // Recarrega a página após 2 segundos
