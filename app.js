@@ -88,6 +88,8 @@ async function insertText(text) {
     }
 }
 
+let lastResponse = null; // Variável para armazenar a última resposta
+
 async function processText(action) {
     const selectedText = await getSelectedText();
     if (!selectedText) {
@@ -123,9 +125,16 @@ async function processText(action) {
         showResponse('Processando...');
         const response = await createThread(userInstruction, selectedText);
         if (response && response.content) {
+            lastResponse = response.content; // Armazena a resposta
             showResponse(response.content);
-            if (action !== 'counter') { // Não substitui o texto original para contra-argumentos
-                await insertText(response.content);
+            
+            // Mostra o botão "Aplicar ao Texto" apenas se não for uma ação de contra-argumento
+            const applyButton = document.getElementById('apply-text');
+            if (action !== 'counter') {
+                applyButton.style.display = 'inline-block';
+                applyButton.onclick = () => insertText(lastResponse);
+            } else {
+                applyButton.style.display = 'none';
             }
         }
     } catch (error) {
