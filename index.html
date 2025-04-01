@@ -20,16 +20,29 @@
 <body class="ms-Fabric">
     <div class="header">
         <h1>Assistente Jurídico IA</h1>
+        <button onclick="showConfigSection()" class="ms-Button ms-Button--icon">
+            <span class="ms-Button-icon"><i class="ms-Icon ms-Icon--Settings"></i></span>
+        </button>
     </div>
 
     <div id="config-section" class="config-section">
-        <h2>Configuração da API Key</h2>
+        <h2>Configurações</h2>
         <div class="ms-TextField">
+            <label class="ms-Label">Chave API da OpenAI</label>
             <input type="password" id="apiKey" class="ms-TextField-field" placeholder="Insira sua chave API da OpenAI">
         </div>
-        <button onclick="saveApiKey()" class="ms-Button ms-Button--primary">
-            <span class="ms-Button-label">Salvar Chave API</span>
-        </button>
+        <div class="ms-TextField">
+            <label class="ms-Label">Instruções do Assistente</label>
+            <textarea id="assistantInstructions" class="ms-TextField-field" rows="4" placeholder="Digite as instruções específicas para o assistente..."></textarea>
+        </div>
+        <div class="button-group">
+            <button onclick="saveApiKey()" class="ms-Button ms-Button--primary">
+                <span class="ms-Button-label">Salvar Configurações</span>
+            </button>
+            <button onclick="hideConfigSection()" class="ms-Button">
+                <span class="ms-Button-label">Cancelar</span>
+            </button>
+        </div>
     </div>
 
     <div class="main-content">

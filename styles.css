@@ -5,15 +5,18 @@ body {
 }
 
 .header {
-    background-color: #2c3e50;
-    color: white;
-    padding: 20px;
-    text-align: center;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    background-color: #f3f2f1;
+    border-bottom: 1px solid #edebe9;
 }
 
 .header h1 {
     margin: 0;
-    font-size: 24px;
+    font-size: 1.5em;
+    color: #323130;
 }
 
 .main-content {
@@ -105,12 +108,34 @@ body {
     margin-top: 5px;
 }
 
+.ms-Button--icon {
+    min-width: 32px;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+}
+
+.ms-Button--icon:hover {
+    background-color: #edebe9;
+}
+
 .config-section {
     padding: 20px;
     margin: 20px;
     background-color: #f3f2f1;
     border-radius: 4px;
-    display: none; /* Inicialmente oculta */
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    max-width: 500px;
+    width: 90%;
 }
 
 .config-section.visible {
@@ -127,6 +152,22 @@ body {
     margin-bottom: 15px;
 }
 
-.config-section .ms-Button {
-    margin-top: 10px;
+.config-section .ms-Label {
+    display: block;
+    margin-bottom: 5px;
+    color: #323130;
+}
+
+.config-section .ms-TextField-field {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #8a8886;
+    border-radius: 2px;
+}
+
+.config-section .button-group {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 20px;
 } 

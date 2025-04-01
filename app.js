@@ -19,21 +19,29 @@ Office.onReady((info) => {
 });
 
 function initializeApp() {
-    // Tenta carregar a chave API do localStorage
+    // Tenta carregar as configurações do localStorage
     const savedApiKey = localStorage.getItem('openaiApiKey');
+    const savedInstructions = localStorage.getItem('assistantInstructions');
+    
     if (savedApiKey) {
         defaultConfig.apiKey = savedApiKey;
+    }
+    
+    if (savedInstructions) {
+        defaultConfig.instructions = savedInstructions;
     }
 
     // Mostra ou esconde a seção de configuração
     const configSection = document.getElementById('config-section');
     if (!defaultConfig.apiKey) {
-        configSection.classList.add('visible');
+        showConfigSection();
         showError('Por favor, configure sua chave API para continuar');
         return;
-    } else {
-        configSection.classList.remove('visible');
     }
+
+    // Preenche os campos de configuração
+    document.getElementById('apiKey').value = defaultConfig.apiKey;
+    document.getElementById('assistantInstructions').value = defaultConfig.instructions;
 
     // Adiciona listeners para todos os botões
     document.querySelectorAll('button[data-action]').forEach(button => {
@@ -42,6 +50,16 @@ function initializeApp() {
             processText(action);
         });
     });
+}
+
+function showConfigSection() {
+    const configSection = document.getElementById('config-section');
+    configSection.classList.add('visible');
+}
+
+function hideConfigSection() {
+    const configSection = document.getElementById('config-section');
+    configSection.classList.remove('visible');
 }
 
 async function getSelectedText() {
@@ -203,6 +221,8 @@ function loadSettings() {
 
 async function saveApiKey() {
     const apiKey = document.getElementById('apiKey').value;
+    const instructions = document.getElementById('assistantInstructions').value;
+
     if (!apiKey) {
         showError('Por favor, insira uma chave API válida');
         return;
@@ -210,17 +230,24 @@ async function saveApiKey() {
     
     // Salva a chave API
     localStorage.setItem('openaiApiKey', apiKey);
-    defaultConfig.apiKey = apiKey; // Atualiza a configuração atual
+    defaultConfig.apiKey = apiKey;
+    
+    // Salva as instruções do assistente
+    if (instructions) {
+        localStorage.setItem('assistantInstructions', instructions);
+        defaultConfig.instructions = instructions;
+    }
     
     // Atualiza as configurações gerais
     const settings = {
         apiKey: apiKey,
-        gptModel: 'gpt-4',
-        customPrompts: ''
+        instructions: instructions,
+        gptModel: 'gpt-4'
     };
     localStorage.setItem('aiAssistantSettings', JSON.stringify(settings));
     
-    showResponse('Chave API salva com sucesso!');
+    showResponse('Configurações salvas com sucesso!');
+    hideConfigSection();
     
     // Recarrega a página após 2 segundos
     setTimeout(() => {
