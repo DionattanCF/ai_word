@@ -7,8 +7,7 @@
 
 const defaultConfig = {
     apiKey: '', // A chave API deve ser configurada via interface do usuário
-    assistantId: '', // ID do assistente da OpenAI (obrigatório)
-    instructions: 'Você é um assistente jurídico especializado em direito eleitoral brasileiro. Seu objetivo é ajudar na análise e redação de documentos jurídicos, fornecendo sugestões precisas e fundamentadas na legislação eleitoral vigente.'
+    assistantId: '' // ID do assistente da OpenAI (obrigatório)
 };
 
 // Variável para armazenar o ID do thread atual
@@ -26,7 +25,6 @@ function initializeApp() {
     // Tenta carregar as configurações do localStorage
     const savedApiKey = localStorage.getItem('openaiApiKey');
     const savedAssistantId = localStorage.getItem('openaiAssistantId');
-    const savedInstructions = localStorage.getItem('assistantInstructions');
     
     if (savedApiKey) {
         defaultConfig.apiKey = savedApiKey;
@@ -34,10 +32,6 @@ function initializeApp() {
     
     if (savedAssistantId) {
         defaultConfig.assistantId = savedAssistantId;
-    }
-    
-    if (savedInstructions) {
-        defaultConfig.instructions = savedInstructions;
     }
 
     // Mostra ou esconde a seção de configuração
@@ -51,7 +45,6 @@ function initializeApp() {
     // Preenche os campos de configuração
     document.getElementById('apiKey').value = defaultConfig.apiKey;
     document.getElementById('assistantId').value = defaultConfig.assistantId;
-    document.getElementById('assistantInstructions').value = defaultConfig.instructions;
 
     // Inicializa um novo thread para o assistente
     createNewThread();
@@ -218,7 +211,6 @@ function loadSettings() {
 async function saveApiKey() {
     const apiKey = document.getElementById('apiKey').value;
     const assistantId = document.getElementById('assistantId').value;
-    const instructions = document.getElementById('assistantInstructions').value;
 
     if (!apiKey) {
         showError('Por favor, insira uma chave API válida');
@@ -238,17 +230,10 @@ async function saveApiKey() {
     localStorage.setItem('openaiAssistantId', assistantId);
     defaultConfig.assistantId = assistantId;
     
-    // Salva as instruções do assistente (opcional)
-    if (instructions) {
-        localStorage.setItem('assistantInstructions', instructions);
-        defaultConfig.instructions = instructions;
-    }
-    
     // Atualiza as configurações gerais
     const settings = {
         apiKey: apiKey,
-        assistantId: assistantId,
-        instructions: instructions
+        assistantId: assistantId
     };
     localStorage.setItem('aiAssistantSettings', JSON.stringify(settings));
     
@@ -280,7 +265,9 @@ async function createNewThread() {
         });
 
         if (!response.ok) {
-            throw new Error(`Erro ao criar thread: ${response.status}`);
+            const errorData = await response.json().catch(() => ({}));
+            console.error('Erro ao criar thread:', response.status, errorData);
+            throw new Error(`Erro ao criar thread: ${response.status} - ${errorData.error?.message || 'Erro desconhecido'}`);
         }
 
         const data = await response.json();
@@ -310,7 +297,8 @@ async function processWithAssistant(instruction, text) {
         });
 
         if (!messageResponse.ok) {
-            throw new Error(`Erro ao adicionar mensagem: ${messageResponse.status}`);
+            const errorData = await messageResponse.json().catch(() => ({}));
+            throw new Error(`Erro ao adicionar mensagem: ${messageResponse.status} - ${errorData.error?.message || 'Erro desconhecido'}`);
         }
 
         // Executa o assistente no thread
@@ -327,7 +315,8 @@ async function processWithAssistant(instruction, text) {
         });
 
         if (!runResponse.ok) {
-            throw new Error(`Erro ao executar assistente: ${runResponse.status}`);
+            const errorData = await runResponse.json().catch(() => ({}));
+            throw new Error(`Erro ao executar assistente: ${runResponse.status} - ${errorData.error?.message || 'Erro desconhecido'}`);
         }
 
         const runData = await runResponse.json();
@@ -347,7 +336,8 @@ async function processWithAssistant(instruction, text) {
             });
 
             if (!statusResponse.ok) {
-                throw new Error(`Erro ao verificar status: ${statusResponse.status}`);
+                const errorData = await statusResponse.json().catch(() => ({}));
+                throw new Error(`Erro ao verificar status: ${statusResponse.status} - ${errorData.error?.message || 'Erro desconhecido'}`);
             }
 
             const statusData = await statusResponse.json();
@@ -368,7 +358,8 @@ async function processWithAssistant(instruction, text) {
         });
 
         if (!messagesResponse.ok) {
-            throw new Error(`Erro ao obter mensagens: ${messagesResponse.status}`);
+            const errorData = await messagesResponse.json().catch(() => ({}));
+            throw new Error(`Erro ao obter mensagens: ${messagesResponse.status} - ${errorData.error?.message || 'Erro desconhecido'}`);
         }
 
         const messagesData = await messagesResponse.json();
