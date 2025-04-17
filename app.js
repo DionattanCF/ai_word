@@ -259,7 +259,7 @@ async function createNewThread() {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${defaultConfig.apiKey}`,
-                'OpenAI-Beta': 'assistants=v1'
+                'OpenAI-Beta': 'assistants=v2'
             },
             body: JSON.stringify({})
         });
@@ -288,7 +288,7 @@ async function processWithAssistant(instruction, text) {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${defaultConfig.apiKey}`,
-                'OpenAI-Beta': 'assistants=v1'
+                'OpenAI-Beta': 'assistants=v2'
             },
             body: JSON.stringify({
                 role: 'user',
@@ -307,7 +307,7 @@ async function processWithAssistant(instruction, text) {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${defaultConfig.apiKey}`,
-                'OpenAI-Beta': 'assistants=v1'
+                'OpenAI-Beta': 'assistants=v2'
             },
             body: JSON.stringify({
                 assistant_id: defaultConfig.assistantId
@@ -331,7 +331,7 @@ async function processWithAssistant(instruction, text) {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${defaultConfig.apiKey}`,
-                    'OpenAI-Beta': 'assistants=v1'
+                    'OpenAI-Beta': 'assistants=v2'
                 }
             });
 
@@ -353,7 +353,7 @@ async function processWithAssistant(instruction, text) {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${defaultConfig.apiKey}`,
-                'OpenAI-Beta': 'assistants=v1'
+                'OpenAI-Beta': 'assistants=v2'
             }
         });
 
@@ -371,8 +371,21 @@ async function processWithAssistant(instruction, text) {
         }
 
         const lastMessage = assistantMessages[0];
+        // Ajuste para o formato v2 da API de Assistentes
+        let messageContent = '';
+        if (lastMessage.content && lastMessage.content.length > 0) {
+            const textContent = lastMessage.content.find(item => item.type === 'text');
+            if (textContent && textContent.text) {
+                messageContent = textContent.text.value;
+            }
+        }
+        
+        if (!messageContent) {
+            throw new Error('Formato de resposta não reconhecido');
+        }
+        
         return {
-            content: lastMessage.content[0].text.value
+            content: messageContent
         };
     } catch (error) {
         throw new Error(`Erro ao usar assistente: ${error.message}`);
