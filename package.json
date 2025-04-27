@@ -10,7 +10,8 @@
     "validate": "office-addin-manifest validate manifest.xml"
   },
   "dependencies": {
-    "@microsoft/office-js": "^1.1.0"
+    "@microsoft/office-js": "^1.1.0",
+    "sharp": "^0.34.1"
   },
   "devDependencies": {
     "@types/office-js": "^1.0.0",
