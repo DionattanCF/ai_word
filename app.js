@@ -241,9 +241,26 @@ async function getSelectedText() {
 
 async function insertText(text) {
     try {
+        // Remove qualquer tag HTML que possa estar presente antes de inserir no documento
+        const cleanText = text.replace(/<\/?[^>]+(>|$)/g, "");
+        
         await Word.run(async (context) => {
             const range = context.document.getSelection();
-            range.insertText(text, 'Replace');
+            
+            // Aplica o texto limpo
+            range.insertText(cleanText, 'Replace');
+            
+            // Aplica formatação básica se necessário
+            // Isso pode ser expandido conforme necessidade
+            range.load('text');
+            await context.sync();
+            
+            // Opcional: adicionar espaçamento de linha adequado
+            range.paragraphs.spacing = {
+                before: 6,
+                after: 6
+            };
+            
             await context.sync();
         });
     } catch (error) {
@@ -252,6 +269,54 @@ async function insertText(text) {
 }
 
 let lastResponse = null; // Variável para armazenar a última resposta
+
+// Função para formatar o texto recebido da OpenAI
+function formatResponseText(text) {
+    if (!text) return '';
+    
+    // Remove caracteres especiais usados para formatação pela OpenAI
+    let formattedText = text
+        // Remove separadores especiais
+        .replace(/^---+$/gm, '') 
+        .replace(/^\*\*\*+$/gm, '') 
+        .replace(/^#+$/gm, '') 
+        .replace(/^==+$/gm, '')
+        .replace(/^__+$/gm, '')
+        
+        // Limpa o uso de asteriscos e sublinhados no início e fim das linhas
+        .replace(/^\*\*|\*\*$/gm, '')
+        .replace(/^__|\__$/gm, '')
+        
+        // Trata listas 
+        .replace(/^\s*[-*]\s+/gm, '• ') // Converte marcadores de lista para bullets
+        .replace(/^\s*\d+\.\s+/gm, (match) => match) // Preserva listas numeradas
+        
+        // Trata formatação básica de Markdown mantendo negrito e itálico
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        .replace(/__(.*?)__/g, '<strong>$1</strong>')
+        .replace(/\*(.*?)\*/g, '<em>$1</em>')
+        .replace(/_(.*?)_/g, '<em>$1</em>')
+        
+        // Trata formatação de parágrafos
+        .replace(/\n{3,}/g, '\n\n') // Limita a 2 quebras de linha consecutivas
+        
+        // Trata citações
+        .replace(/^>\s*(.*?)$/gm, '<blockquote>$1</blockquote>')
+        
+        .trim();
+    
+    // Se o texto começar com marcadores de lista ou números, garante que há um espaço no início
+    if (formattedText.match(/^[•\d\.]/)) {
+        formattedText = '\n' + formattedText;
+    }
+    
+    // Garante que parágrafos tenham espaçamento adequado
+    formattedText = formattedText
+        .replace(/([^\n])\n([^\n•\d])/g, '$1\n\n$2') // Adiciona linha em branco entre parágrafos normais
+        .replace(/\n{3,}/g, '\n\n'); // Limita novamente a 2 quebras de linha
+    
+    return formattedText;
+}
 
 async function processText(action) {
     const selectedText = await getSelectedText();
@@ -303,8 +368,12 @@ async function processText(action) {
         const response = await processWithAssistant(userInstruction, selectedText);
         
         if (response && response.content) {
-            lastResponse = response.content; // Armazena a resposta
-            showResponse(response.content);
+            // Formata o texto da resposta
+            const formattedContent = formatResponseText(response.content);
+            lastResponse = formattedContent; // Armazena a resposta formatada
+            
+            // Exibe a resposta formatada
+            showFormattedResponse(formattedContent);
             
             // Mostra o botão "Aplicar ao Texto" apenas se não for uma ação de contra-argumento
             const applyButton = document.getElementById('apply-text');
@@ -322,6 +391,44 @@ async function processText(action) {
             chatInput.value = ''; // Limpa o campo de entrada após o envio
         }
     }
+}
+
+function showFormattedResponse(message) {
+    const responseContent = document.getElementById('response-content');
+    
+    // Aplicar formatação HTML para a exibição
+    let htmlFormatted = message
+        // Quebras de linha para HTML
+        .replace(/\n\n/g, '</p><p>') // Parágrafos
+        .replace(/\n/g, '<br>') // Quebras de linha simples
+        
+        // Preserva formatação
+        .replace(/<strong>(.*?)<\/strong>/g, '<strong>$1</strong>')
+        .replace(/<em>(.*?)<\/em>/g, '<em>$1</em>')
+        
+        // Blocos de citação
+        .replace(/<blockquote>(.*?)<\/blockquote>/g, '<blockquote>$1</blockquote>')
+        
+        // Listas
+        .replace(/^•\s*(.*?)(?=<br>|<\/p>|$)/gm, '<li>$1</li>');
+    
+    // Envolve o conteúdo em parágrafos se ainda não estiver
+    if (!htmlFormatted.startsWith('<p>')) {
+        htmlFormatted = '<p>' + htmlFormatted;
+    }
+    if (!htmlFormatted.endsWith('</p>')) {
+        htmlFormatted = htmlFormatted + '</p>';
+    }
+    
+    // Corrige eventuais parágrafos vazios
+    htmlFormatted = htmlFormatted
+        .replace(/<p>\s*<\/p>/g, '')
+        .replace(/<p><li>/g, '<ul><li>') // Início de lista
+        .replace(/<\/li><\/p>/g, '</li></ul>') // Fim de lista
+        .replace(/<\/li><br><li>/g, '</li><li>'); // Itens de lista
+    
+    responseContent.innerHTML = htmlFormatted;
+    responseContent.parentElement.style.display = 'block';
 }
 
 function showResponse(message) {
