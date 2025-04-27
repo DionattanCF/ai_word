@@ -6,12 +6,11 @@
   <DefaultLocale>pt-BR</DefaultLocale>
   <DisplayName DefaultValue="JusTexto"/>
   <Description DefaultValue="Um assistente jurídico alimentado por IA para ajudar na redação e análise de documentos jurídicos."/>
-  <IconUrl DefaultValue="https://aiword.dionattan.adv.br/assets/icon-32.png"/>
-  <HighResolutionIconUrl DefaultValue="https://aiword.dionattan.adv.br/assets/icon-64.png"/>
+  <IconUrl DefaultValue="https://i.imgur.com/FgS9Jca.png"/>
+  <HighResolutionIconUrl DefaultValue="https://i.imgur.com/DhluUme.png"/>
   <SupportUrl DefaultValue="https://dionattancf.github.io/ai_word/support.html"/>
   <AppDomains>
     <AppDomain>https://dionattancf.github.io</AppDomain>
-    <AppDomain>https://aiword.dionattan.adv.br</AppDomain>
   </AppDomains>
   <Hosts>
     <Host Name="Document"/>
@@ -63,9 +62,9 @@
     </Hosts>
     <Resources>
       <bt:Images>
-        <bt:Image id="Icon.16x16" DefaultValue="https://aiword.dionattan.adv.br/assets/icon-16.png"/>
-        <bt:Image id="Icon.32x32" DefaultValue="https://aiword.dionattan.adv.br/assets/icon-32.png"/>
-        <bt:Image id="Icon.80x80" DefaultValue="https://aiword.dionattan.adv.br/assets/icon-80.png"/>
+        <bt:Image id="Icon.16x16" DefaultValue="https://i.imgur.com/FgS9Jca.png"/>
+        <bt:Image id="Icon.32x32" DefaultValue="https://i.imgur.com/FgS9Jca.png"/>
+        <bt:Image id="Icon.80x80" DefaultValue="https://i.imgur.com/DhluUme.png"/>
       </bt:Images>
       <bt:Urls>
         <bt:Url id="GetStarted.LearnMoreUrl" DefaultValue="https://dionattancf.github.io/ai_word/support.html"/>
