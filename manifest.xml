@@ -8,7 +8,7 @@
   <Description DefaultValue="Um assistente jurídico alimentado por IA para ajudar na redação e análise de documentos jurídicos."/>
   <IconUrl DefaultValue="https://i.imgur.com/FgS9Jca.png"/>
   <HighResolutionIconUrl DefaultValue="https://i.imgur.com/DhluUme.png"/>
-  <SupportUrl DefaultValue="https://www.linkedin.com/in/dionattancf1/"/>
+  <SupportUrl DefaultValue="https://aiword.dionattan.adv.br/support.html"/>
   <AppDomains>
     <AppDomain>https://dionattancf.github.io</AppDomain>
   </AppDomains>
@@ -67,7 +67,8 @@
         <bt:Image id="Icon.80x80" DefaultValue="https://i.imgur.com/DhluUme.png"/>
       </bt:Images>
       <bt:Urls>
-        <bt:Url id="GetStarted.LearnMoreUrl" DefaultValue="https://www.linkedin.com/in/dionattancf1/"/>
+        <bt:Url id="GetStarted.LearnMoreUrl" DefaultValue="https://aiword.dionattan.adv.br/support.html"/>
+        <bt:Url id="PrivacyPolicy.Url" DefaultValue="https://aiword.dionattan.adv.br/politica_privacidade.html"/>
         <bt:Url id="Commands.Url" DefaultValue="https://dionattancf.github.io/ai_word/index.html"/>
         <bt:Url id="Taskpane.Url" DefaultValue="https://dionattancf.github.io/ai_word/index.html"/>
       </bt:Urls>
