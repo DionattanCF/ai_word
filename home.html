@@ -11,25 +11,31 @@
       font-family: "Segoe UI", Arial, sans-serif;
       background: linear-gradient(135deg, #1E3A8A, #3B82F6);
       color: white;
-      height: 100vh;
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
       text-align: center;
+      padding: 20px;
     }
     h1 {
       font-size: 3rem;
       margin-bottom: 1rem;
     }
+    h2 {
+      font-size: 1.8rem;
+      margin-top: 2.5rem;
+      margin-bottom: 1rem;
+    }
     p {
       font-size: 1.3rem;
-      max-width: 600px;
-      margin-bottom: 2rem;
+      max-width: 800px;
+      margin-bottom: 1.5rem;
       line-height: 1.6;
     }
     .btn {
-      background-color: #10B981;
+      background-color: #25D366;
       color: white;
       padding: 0.8rem 1.5rem;
       border: none;
@@ -37,16 +43,41 @@
       font-size: 1rem;
       text-decoration: none;
       transition: background 0.3s;
+      display: inline-flex;
+      align-items: center;
+      margin-bottom: 2rem;
     }
     .btn:hover {
-      background-color: #059669;
+      background-color: #128C7E;
+    }
+    .btn i {
+      margin-right: 8px;
+      font-size: 1.2rem;
     }
     footer {
       margin-top: 3rem;
       font-size: 0.9rem;
       opacity: 0.8;
     }
+    .instructions {
+      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 20px;
+      text-align: left;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .instructions ol {
+      margin-left: 20px;
+      padding-left: 20px;
+    }
+    .instructions li {
+      margin-bottom: 10px;
+      font-size: 1.1rem;
+      line-height: 1.5;
+    }
   </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 
 <body>
@@ -57,7 +88,23 @@
     redação e revisão jurídica de alto nível dentro do Microsoft Word.
   </p>
 
-  <a href="mailto:contato@dionattan.adv.br" class="btn">Entre em Contato</a>
+  <a href="https://wa.me/5562983404044" class="btn"><i class="fab fa-whatsapp"></i>Entre em Contato</a>
+
+  <h2>Como Configurar e Usar</h2>
+  <div class="instructions">
+    <ol>
+      <li>Acesse a plataforma da OpenAI através do link: <a href="https://platform.openai.com/playground" target="_blank" style="color: #10B981;">https://platform.openai.com/playground</a></li>
+      <li>Crie um assistente personalizado com as instruções específicas para seu uso jurídico</li>
+      <li>Faça upload dos arquivos necessários no Vector Store para referência do assistente</li>
+      <li>Obtenha sua chave API da OpenAI nas configurações da sua conta</li>
+      <li>Anote o ID do assistente que você criou e o ID do vector store (se aplicável)</li>
+      <li>No add-in do Word, acesse as configurações e adicione sua chave API</li>
+      <li>Adicione os assistentes que deseja utilizar, informando o nome e o ID de cada um</li>
+      <li>Selecione o assistente desejado no menu suspenso no topo da aplicação</li>
+      <li>Selecione o texto que deseja processar no documento e escolha a ação desejada (reescrever, resumir, etc.)</li>
+      <li>Você também pode digitar instruções personalizadas no campo de texto e enviar</li>
+    </ol>
+  </div>
 
   <footer>
     &copy; 2025 Assistente Jurídico IA - Dionattan Figueiredo

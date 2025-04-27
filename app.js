@@ -7,11 +7,13 @@
 
 const defaultConfig = {
     apiKey: '', // A chave API deve ser configurada via interface do usuário
-    assistantId: '' // ID do assistente da OpenAI (obrigatório)
+    assistants: [] // Lista de assistentes disponíveis
 };
 
 // Variável para armazenar o ID do thread atual
 let currentThreadId = null;
+// Variável para armazenar o assistente atualmente selecionado
+let currentAssistant = null;
 
 Office.onReady((info) => {
     if (info.host === Office.HostType.Word) {
@@ -24,30 +26,47 @@ Office.onReady((info) => {
 function initializeApp() {
     // Tenta carregar as configurações do localStorage
     const savedApiKey = localStorage.getItem('openaiApiKey');
-    const savedAssistantId = localStorage.getItem('openaiAssistantId');
+    const savedAssistants = localStorage.getItem('openaiAssistants');
     
     if (savedApiKey) {
         defaultConfig.apiKey = savedApiKey;
     }
     
-    if (savedAssistantId) {
-        defaultConfig.assistantId = savedAssistantId;
+    if (savedAssistants) {
+        try {
+            defaultConfig.assistants = JSON.parse(savedAssistants);
+        } catch (e) {
+            console.error('Erro ao carregar assistentes:', e);
+            defaultConfig.assistants = [];
+        }
     }
+
+    // Preenche o dropdown com os assistentes disponíveis
+    populateAssistantDropdown();
 
     // Mostra ou esconde a seção de configuração
     const configSection = document.getElementById('config-section');
-    if (!defaultConfig.apiKey || !defaultConfig.assistantId) {
+    if (!defaultConfig.apiKey || defaultConfig.assistants.length === 0) {
         showConfigSection();
-        showError('Por favor, configure sua chave API e ID do Assistente para continuar');
+        showError('Por favor, configure sua chave API e adicione ao menos um assistente para continuar');
         return;
     }
 
     // Preenche os campos de configuração
     document.getElementById('apiKey').value = defaultConfig.apiKey;
-    document.getElementById('assistantId').value = defaultConfig.assistantId;
+    
+    // Adiciona evento de mudança ao seletor de assistentes
+    document.getElementById('current-assistant').addEventListener('change', handleAssistantChange);
+    
+    // Seleciona o primeiro assistente por padrão, se houver
+    if (defaultConfig.assistants.length > 0) {
+        document.getElementById('current-assistant').value = defaultConfig.assistants[0].id;
+        currentAssistant = defaultConfig.assistants[0];
+        createNewThread();
+    }
 
-    // Inicializa um novo thread para o assistente
-    createNewThread();
+    // Renderiza a lista de assistentes na seção de configuração
+    renderAssistantsList();
 
     // Adiciona listeners para todos os botões
     document.querySelectorAll('button[data-action]').forEach(button => {
@@ -66,6 +85,144 @@ function showConfigSection() {
 function hideConfigSection() {
     const configSection = document.getElementById('config-section');
     configSection.classList.remove('visible');
+}
+
+function populateAssistantDropdown() {
+    const dropdown = document.getElementById('current-assistant');
+    // Limpa opções existentes, exceto a primeira (placeholder)
+    while (dropdown.options.length > 1) {
+        dropdown.remove(1);
+    }
+    
+    // Adiciona os assistentes ao dropdown
+    defaultConfig.assistants.forEach(assistant => {
+        const option = document.createElement('option');
+        option.value = assistant.id;
+        option.textContent = assistant.name;
+        dropdown.appendChild(option);
+    });
+}
+
+function renderAssistantsList() {
+    const listContainer = document.getElementById('assistants-list');
+    listContainer.innerHTML = '';
+    
+    if (defaultConfig.assistants.length === 0) {
+        const emptyMessage = document.createElement('p');
+        emptyMessage.textContent = 'Nenhum assistente configurado. Adicione um para começar.';
+        listContainer.appendChild(emptyMessage);
+        return;
+    }
+    
+    defaultConfig.assistants.forEach((assistant, index) => {
+        const assistantItem = document.createElement('div');
+        assistantItem.className = 'assistant-item';
+        
+        const infoDiv = document.createElement('div');
+        infoDiv.className = 'assistant-info';
+        
+        const nameElem = document.createElement('div');
+        nameElem.className = 'assistant-name';
+        nameElem.textContent = assistant.name;
+        
+        const idElem = document.createElement('div');
+        idElem.className = 'assistant-id';
+        idElem.textContent = assistant.id;
+        
+        infoDiv.appendChild(nameElem);
+        infoDiv.appendChild(idElem);
+        
+        const actionsDiv = document.createElement('div');
+        actionsDiv.className = 'assistant-actions';
+        
+        const deleteBtn = document.createElement('button');
+        deleteBtn.innerHTML = '<i class="ms-Icon ms-Icon--Delete"></i>';
+        deleteBtn.title = 'Remover';
+        deleteBtn.onclick = () => removeAssistant(index);
+        
+        actionsDiv.appendChild(deleteBtn);
+        
+        assistantItem.appendChild(infoDiv);
+        assistantItem.appendChild(actionsDiv);
+        
+        listContainer.appendChild(assistantItem);
+    });
+}
+
+function addAssistant() {
+    const name = document.getElementById('assistantName').value.trim();
+    const id = document.getElementById('assistantId').value.trim();
+    
+    if (!name) {
+        showError('Por favor, dê um nome ao assistente');
+        return;
+    }
+    
+    if (!id) {
+        showError('Por favor, insira um ID de Assistente válido');
+        return;
+    }
+    
+    // Adiciona o novo assistente à lista
+    defaultConfig.assistants.push({
+        name: name,
+        id: id
+    });
+    
+    // Salva a lista atualizada
+    localStorage.setItem('openaiAssistants', JSON.stringify(defaultConfig.assistants));
+    
+    // Atualiza a interface
+    renderAssistantsList();
+    populateAssistantDropdown();
+    
+    // Limpa os campos
+    document.getElementById('assistantName').value = '';
+    document.getElementById('assistantId').value = '';
+    
+    showResponse('Assistente adicionado com sucesso!');
+}
+
+function removeAssistant(index) {
+    if (index < 0 || index >= defaultConfig.assistants.length) return;
+    
+    const removedAssistant = defaultConfig.assistants[index];
+    defaultConfig.assistants.splice(index, 1);
+    
+    // Salva a lista atualizada
+    localStorage.setItem('openaiAssistants', JSON.stringify(defaultConfig.assistants));
+    
+    // Atualiza a interface
+    renderAssistantsList();
+    populateAssistantDropdown();
+    
+    // Se o assistente removido era o atual, seleciona outro ou limpa
+    if (currentAssistant && currentAssistant.id === removedAssistant.id) {
+        if (defaultConfig.assistants.length > 0) {
+            document.getElementById('current-assistant').value = defaultConfig.assistants[0].id;
+            currentAssistant = defaultConfig.assistants[0];
+            createNewThread();
+        } else {
+            document.getElementById('current-assistant').value = '';
+            currentAssistant = null;
+        }
+    }
+    
+    showResponse('Assistente removido!');
+}
+
+function handleAssistantChange(event) {
+    const assistantId = event.target.value;
+    if (!assistantId) {
+        currentAssistant = null;
+        return;
+    }
+    
+    const selectedAssistant = defaultConfig.assistants.find(a => a.id === assistantId);
+    if (selectedAssistant) {
+        currentAssistant = selectedAssistant;
+        createNewThread();
+    }
 }
 
 async function getSelectedText() {
@@ -104,8 +261,13 @@ async function processText(action) {
     }
 
     // Verifica se temos as configurações necessárias
-    if (!defaultConfig.apiKey || !defaultConfig.assistantId || !currentThreadId) {
-        showError('Configuração incompleta. Por favor, configure sua chave API e ID do Assistente.');
+    if (!defaultConfig.apiKey || !currentAssistant || !currentThreadId) {
+        if (!currentAssistant) {
+            showError('Selecione um assistente para continuar.');
+            return;
+        }
+        
+        showError('Configuração incompleta. Por favor, configure sua chave API e selecione um assistente.');
         showConfigSection();
         return;
     }
@@ -210,15 +372,9 @@ function loadSettings() {
 
 async function saveApiKey() {
     const apiKey = document.getElementById('apiKey').value;
-    const assistantId = document.getElementById('assistantId').value;
 
     if (!apiKey) {
         showError('Por favor, insira uma chave API válida');
-        return;
-    }
-    
-    if (!assistantId) {
-        showError('Por favor, insira um ID de Assistente válido');
         return;
     }
     
@@ -226,32 +382,31 @@ async function saveApiKey() {
     localStorage.setItem('openaiApiKey', apiKey);
     defaultConfig.apiKey = apiKey;
     
-    // Salva o ID do assistente
-    localStorage.setItem('openaiAssistantId', assistantId);
-    defaultConfig.assistantId = assistantId;
-    
-    // Atualiza as configurações gerais
-    const settings = {
-        apiKey: apiKey,
-        assistantId: assistantId
-    };
-    localStorage.setItem('aiAssistantSettings', JSON.stringify(settings));
-    
     showResponse('Configurações salvas com sucesso!');
+    
+    // Se não houver assistentes adicionados, mantém a tela de configuração aberta
+    if (defaultConfig.assistants.length === 0) {
+        showError('Por favor, adicione pelo menos um assistente para continuar');
+        return;
+    }
+    
     hideConfigSection();
     
-    // Cria um novo thread para o assistente
-    await createNewThread();
+    // Se houver assistentes mas nenhum selecionado, seleciona o primeiro
+    if (!currentAssistant && defaultConfig.assistants.length > 0) {
+        document.getElementById('current-assistant').value = defaultConfig.assistants[0].id;
+        currentAssistant = defaultConfig.assistants[0];
+    }
     
-    // Recarrega a página após 2 segundos
-    setTimeout(() => {
-        location.reload();
-    }, 2000);
+    // Cria um novo thread para o assistente
+    if (currentAssistant) {
+        await createNewThread();
+    }
 }
 
 // Cria um novo thread para a API de Assistentes
 async function createNewThread() {
-    if (!defaultConfig.assistantId || !defaultConfig.apiKey) return;
+    if (!currentAssistant || !defaultConfig.apiKey) return;
     
     try {
         const response = await fetch('https://api.openai.com/v1/threads', {
@@ -310,7 +465,7 @@ async function processWithAssistant(instruction, text) {
                 'OpenAI-Beta': 'assistants=v2'
             },
             body: JSON.stringify({
-                assistant_id: defaultConfig.assistantId
+                assistant_id: currentAssistant.id
             })
         });
 

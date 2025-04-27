@@ -13,6 +13,23 @@ body {
     border-bottom: 1px solid #edebe9;
 }
 
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.assistant-selector {
+    min-width: 200px;
+}
+
+.assistant-selector select {
+    padding: 6px 10px;
+    border: 1px solid #8a8886;
+    border-radius: 2px;
+    width: 100%;
+}
+
 .header h1 {
     margin: 0;
     font-size: 1.5em;
@@ -136,6 +153,8 @@ body {
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     max-width: 500px;
     width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
 }
 
 .config-section.visible {
@@ -146,6 +165,14 @@ body {
     margin-top: 0;
     margin-bottom: 15px;
     color: #323130;
+}
+
+.config-section h3 {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    color: #323130;
+    border-bottom: 1px solid #edebe9;
+    padding-bottom: 5px;
 }
 
 .config-section .ms-TextField {
@@ -172,6 +199,12 @@ body {
     margin-top: 20px;
 }
 
+.config-buttons {
+    margin-top: 30px;
+    border-top: 1px solid #edebe9;
+    padding-top: 15px;
+}
+
 .response-actions {
     margin-top: 15px;
     display: flex;
@@ -180,4 +213,54 @@ body {
 
 .response-actions .ms-Button {
     margin-left: 10px;
+}
+
+.assistants-list {
+    margin-bottom: 15px;
+}
+
+.assistant-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border: 1px solid #edebe9;
+    border-radius: 4px;
+    margin-bottom: 8px;
+    background-color: #f9f9f9;
+}
+
+.assistant-item .assistant-info {
+    flex-grow: 1;
+}
+
+.assistant-item .assistant-name {
+    font-weight: 600;
+    color: #323130;
+}
+
+.assistant-item .assistant-id {
+    font-size: 0.8em;
+    color: #605e5c;
+    margin-top: 3px;
+}
+
+.assistant-item .assistant-actions {
+    display: flex;
+    gap: 5px;
+}
+
+.assistant-item .assistant-actions button {
+    min-width: 32px;
+    height: 32px;
+    padding: 0;
+    background: transparent;
+    border: none;
+    color: #605e5c;
+    cursor: pointer;
+}
+
+.assistant-item .assistant-actions button:hover {
+    color: #323130;
+    background-color: #edebe9;
 } 

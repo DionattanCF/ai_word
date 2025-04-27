@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Assistente Jurídico IA - Dionattan Coutrin Figueiredo</title>
+    <title>Assistente Jurídico IA - JusTexto - Dionattan Coutrin Figueiredo</title>
 
     <!-- Office JavaScript API -->
     <script type="text/javascript" src="https://appsforoffice.microsoft.com/lib/1.1/hosted/office.js"></script>
@@ -19,10 +19,17 @@
 
 <body class="ms-Fabric">
     <div class="header">
-        <h1>Assistente Jurídico IA</h1>
-        <button onclick="showConfigSection()" class="ms-Button ms-Button--icon">
-            <span class="ms-Button-icon"><i class="ms-Icon ms-Icon--Settings"></i></span>
-        </button>
+        <h1>Assistente Jurídico IA - JusTexto</h1>
+        <div class="header-right">
+            <div id="assistant-selector" class="assistant-selector">
+                <select id="current-assistant" class="ms-Dropdown">
+                    <option value="">Selecionar assistente...</option>
+                </select>
+            </div>
+            <button onclick="showConfigSection()" class="ms-Button ms-Button--icon">
+                <span class="ms-Button-icon"><i class="ms-Icon ms-Icon--Settings"></i></span>
+            </button>
+        </div>
     </div>
 
     <div id="config-section" class="config-section">
@@ -31,11 +38,28 @@
             <label class="ms-Label">Chave API da OpenAI</label>
             <input type="password" id="apiKey" class="ms-TextField-field" placeholder="Insira sua chave API da OpenAI">
         </div>
+        
+        <h3>Assistentes</h3>
+        <div id="assistants-list" class="assistants-list">
+            <!-- Lista de assistentes será preenchida dinamicamente -->
+        </div>
+        
+        <h3>Adicionar Novo Assistente</h3>
         <div class="ms-TextField">
-            <label class="ms-Label">ID do Assistente (obrigatório)</label>
-            <input type="text" id="assistantId" class="ms-TextField-field" placeholder="Insira o ID do assistente pré-configurado na OpenAI" required>
+            <label class="ms-Label">Nome do Assistente</label>
+            <input type="text" id="assistantName" class="ms-TextField-field" placeholder="Digite um nome para o assistente">
+        </div>
+        <div class="ms-TextField">
+            <label class="ms-Label">ID do Assistente</label>
+            <input type="text" id="assistantId" class="ms-TextField-field" placeholder="Insira o ID do assistente pré-configurado na OpenAI">
         </div>
         <div class="button-group">
+            <button onclick="addAssistant()" class="ms-Button">
+                <span class="ms-Button-label">Adicionar Assistente</span>
+            </button>
+        </div>
+        
+        <div class="button-group config-buttons">
             <button onclick="saveApiKey()" class="ms-Button ms-Button--primary">
                 <span class="ms-Button-label">Salvar Configurações</span>
             </button>
