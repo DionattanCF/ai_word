@@ -6,8 +6,8 @@
   <DefaultLocale>pt-BR</DefaultLocale>
   <DisplayName DefaultValue="JusTexto"/>
   <Description DefaultValue="Um assistente jurídico alimentado por IA para ajudar na redação e análise de documentos jurídicos."/>
-  <IconUrl DefaultValue="https://i.imgur.com/Corrected32x32.png"/>
-  <HighResolutionIconUrl DefaultValue="https://i.imgur.com/Corrected64x64.png"/>
+  <IconUrl DefaultValue="https://aiword.dionattan.adv.br/assets/icon-32.png"/>
+  <HighResolutionIconUrl DefaultValue="https://aiword.dionattan.adv.br/assets/icon-64.png"/>
   <SupportUrl DefaultValue="https://aiword.dionattan.adv.br/support.html"/>
   <AppDomains>
     <AppDomain>https://dionattancf.github.io</AppDomain>
@@ -62,7 +62,7 @@
     </Hosts>
     <Resources>
       <bt:Images>
-        <bt:Image id="Icon.16x16" DefaultValue="https://i.imgur.com/Corrected16x16.png"/>
+        <bt:Image id="Icon.16x16" DefaultValue="https://aiword.dionattan.adv.br/assets/icon-16.png"/>
         <bt:Image id="Icon.32x32" DefaultValue="https://aiword.dionattan.adv.br/assets/icon-32.png"/>
         <bt:Image id="Icon.64x64" DefaultValue="https://aiword.dionattan.adv.br/assets/icon-64.png"/>
       </bt:Images>
